@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nuestra Galería 💞</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#ff6b9f" />
+</head>
+
+<body>
+    <!-- fondo (opcional si ya lo usas en index) -->
+    <div class="hearts" id="hearts"></div>
+
+    <header class="hero" style="min-height:auto;padding:4rem 1rem 2rem">
+        <div class="badge">💖 Nuestra galería</div>
+        <h1 class="gradient-title">Momentos de Mariana & Sergio</h1>
+        <p class="sub">Un rinconcito con nuestras fotos y videos favoritos. Toca para ver en grande ✨</p>
+        <div class="cta">
+            <a class="btn ghost" href="index.html">← Volver</a>
+        </div>
+    </header>
+
+    <section class="container" style="padding:1rem 1rem 3rem">
+
+        <!-- Filtros -->
+        <div class="chips" id="filterChips" aria-label="Filtros">
+            <button class="chip is-active" data-filter="*">Todo</button>
+            <button class="chip" data-filter="nosotros">Nosotros</button>
+            <button class="chip" data-filter="citas">Citas</button>
+            <button class="chip" data-filter="selfies">Selfies</button>
+            <button class="chip" data-filter="familia">Familia</button>
+            <button class="chip" data-filter="videos">Videos</button>
+        </div>
+
+        <!-- Subidor -->
+        <form id="uplForm" class="uploader" autocomplete="off">
+            <input type="file" id="uplInput" accept="image/*,video/mp4" multiple hidden>
+            <button type="button" class="btn" id="uplBtn">Subir fotos / videos</button>
+            <span class="uhelp">Formatos: JPG/PNG/WEBP/GIF o MP4. Máx 10MB.</span>
+        </form>
+
+        <!-- Grid -->
+        <div class="gallery-grid" id="galleryGrid">
+            <!-- Ejemplos locales opcionales (puedes borrar):
+      <figure class="gitem" data-tags="nosotros,citas">
+        <img src="/images/Img1.jpg" alt="Noche bonita" loading="lazy">
+        <figcaption>Noche bonita</figcaption>
+      </figure>
+      <figure class="gitem" data-tags="videos" data-type="video"
+              data-src="/videos/clip1.mp4" data-poster="/images/clip1-thumb.jpg">
+        <img src="/images/clip1-thumb.jpg" alt="Bailando" loading="lazy">
+        <figcaption>Bailando</figcaption>
+      </figure>
+      -->
+        </div>
+    </section>
+
+    <!-- Lightbox -->
+    <div class="lightbox hidden" id="lightbox" aria-hidden="true" role="dialog" aria-label="Visor de fotos">
+        <button class="lb-close" id="lbClose" aria-label="Cerrar">✕</button>
+        <button class="lb-prev" id="lbPrev" aria-label="Anterior">‹</button>
+        <figure class="lb-frame">
+            <img id="lbImg" alt="" />
+            <video id="lbVideo" controls playsinline></video>
+            <figcaption id="lbCap"></figcaption>
+        </figure>
+        <button class="lb-next" id="lbNext" aria-label="Siguiente">›</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

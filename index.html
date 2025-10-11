@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Para — Mi Baby 💖💖</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- 🟣 Open Graph / WhatsApp & Twitter Cards -->
+  <meta name="description"
+    content="Nuestra historia: nos conocimos el 16/07/2025 y empezamos el 07/09/2025. Una carta, fotos y una canción para mi baby 💖." />
+  <link rel="canonical" href="https://unacortahistoriadeamor.netlify.app/" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_CO" />
+  <meta property="og:title" content="Carta del primer mes — Para Mariana 💖💖" />
+  <meta property="og:description"
+    content="Nos conocimos el 16/07/2025 y oficializamos el 07/09/2025. Una página hecha con amor: carta, recuerdos y nuestra canción." />
+  <meta property="og:url" content="https://unacortahistoriadeamor.netlify.app/" />
+  <meta property="og:image" content="https://unacortahistoriadeamor.netlify.app/images/preview.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Carta del primer mes — Para Mariana 💖💖" />
+  <meta name="twitter:description"
+    content="Nuestra historia en rosa pastel: 16/07/2025 → 07/09/2025. Con carta, fotos y música." />
+  <meta name="twitter:image" content="https://unacortahistoriadeamor.netlify.app/images/preview.jpg" />
+
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="script.js"></script>
+</head>
+
+<body>
+  <div class="hearts" id="hearts"></div>
+  <!-- Toggle de tema (flotante) -->
+  <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">🌙 Modo oscuro</button>
+  <!-- 🏆 Header / Hero -->
+  <header class="hero">
+    <div class="badge">💖💖 Para <strong>Mariana</strong> — Mi baby</div>
+    <h1 class="headline">Desde que nos conocimos el 16/07/2025, supe que venían días bonitos</h1>
+    <p class="sub">Nuestra historia empezó el <strong>16/07/2025</strong> y dijimos que si el
+      <strong>07/09/2025</strong>. Hoy celebramos este camino juntos 💞
+    </p>
+
+    <!-- 🔢 Contadores -->
+    <div id="relationshipDuration" class="small"></div>
+    <div id="monthCounter" class="small"></div>
+
+    <div class="cta">
+      <button class="btn" id="goTimeline">Ver nuestra historia</button>
+      <button class="btn ghost" id="goLetter">Abrir mi carta para ti</button>
+    </div>
+  </header>
+
+  <!-- 🩷 Cards resumen -->
+  <section>
+    <div class="container">
+      <div class="cards">
+        <div class="card">
+          <h3>Nos conocimos</h3>
+          <p><b>16 de julio de 2025 </b><br>Ese día no sabía lo que iba a pasar, pero las notas me guiaron
+            hacia una de las mejores decisiones que he tomado en mi vida: escribirte a ti y darme la
+            oportunidad de conocerte.
+          </p>
+        </div>
+        <div class="card">
+          <h3>Empezamos</h3>
+          <p><b> 07 de septiembre de 2025</b><br> Yo creo que este día ha sido uno de los más raros de mi
+            vida, porque primero no esperaba estar contigo hoy; todo fue de repente. Pero, de algo que salió
+            de la nada, me atreví. No fue como lo había planeado, pero sentí que era el momento para
+            hacerlo. No sabía qué iba a pasar, pero no me arrepiento de haberlo hecho así. Siento que fue
+            más lindo hacerlo de manera sencilla que con algo extravagante.</p>
+        </div>
+        <div class="card">
+          <h3>Contando juntos</h3>
+          <p>Llevamos <strong id="daysTogether">—</strong> días como novios 💖</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ✨ Línea del tiempo -->
+  <section id="timeline" class="timeline">
+    <div class="container">
+      <h2>Nuestra línea del tiempo ✨</h2>
+      <div class="moment">
+        <div class="date">16/07/2025 — El día que te vi</div>
+        <p>Nos conocimos. Ahí empezó todo: tu risa, tu mirada y esa sensación de hogar.</p>
+      </div>
+      <div class="moment">
+        <div class="date">07/09/2025 — Nuestra historia oficial</div>
+        <p>Te pedí que fuéramos novios. Ese día el mundo se sintió más suave 💕</p>
+      </div>
+      <div class="moment">
+        <div class="date">Hoy — Y todos los días que vienen</div>
+        <p>Quiero seguir sumando momentos contigo: pequeños, sencillos y felices.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 📸 Recuerdos en polaroid -->
+  <section id="recuerdos">
+    <div class="container">
+      <h2>Nuestros recuerdos 📸</h2>
+      <div class="polaroids">
+        <figure class="polaroid"><img src="/images/img4.jpg" alt="Recuerdo 1">
+          <figcaption class="cap">Nuestra primera cita</figcaption>
+        </figure>
+        <figure class="polaroid"><img src="/images/Img1.jpg" alt="Recuerdo 2">
+          <figcaption class="cap">El dia que me diste el si</figcaption>
+        </figure>
+        <figure class="polaroid"><img src="/images/Img6.jpg" alt="Recuerdo 3">
+          <figcaption class="cap">Solamente tu y yo</figcaption>
+        </figure>
+        <figure class="polaroid"><img src="/images/Img2.jpg" alt="Recuerdo 3">
+          <figcaption class="cap">La mejor pijamada del mundo</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+  <!-- CTA para ir a la galería completa -->
+  <section style="padding-top:0">
+    <div class="container">
+      <div class="cta">
+        <a class="btn" href="galeria.html">Ver todos nuestros recuerdos juntos</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 💌 Carta de amor -->
+  <section id="carta">
+    <div class="container">
+      <h2>Mi carta para ti 💌</h2>
+      <div class="letter">
+        <h3>Mi carta para ti, Baby 💖💖</h3>
+        <p>Mi baby, gracias por estos días. Desde el 16/07/2025 hasta hoy, cada momento contigo me confirma que
+          eres ese pedacito de paz y alegría que no sabía cuánto necesitaba. Me encanta cómo sonríes, cómo
+          miras el mundo y cómo haces que todo sea más bonito.</p>
+        <p>El 07/09/2025 empezó oficialmente nuestra historia. Lo que quiero es simple: seguir a tu lado,
+          cuidarte, celebrar lo pequeñito, abrazarte fuerte y decirte que aquí tienes hogar.</p>
+        <p>Feliz primer mes (y los miles que vienen). Te quiero hoy, mañana y siempre 💖</p>
+        <div class="sig">— Sergio</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🎵 Música -->
+  <section>
+    <div class="container">
+      <h2>Nuestra canción 🎵</h2>
+      <div class="player">
+        <label for="songSelect" class="select-label">Canción: </label>
+        <select id="songSelect" class="song-select" aria-label="Seleccionar canción"></select>
+        <div class="volume">
+          <label for="volRange">Volumen</label>
+          <input id="volRange" type="range" min="0" max="100" value="60" step="1" />
+          <span id="volPct">60%</span>
+        </div>
+        <!-- deja el <audio> y los botones tal como los tienes abajo -->
+        <audio id="audio" controls preload="none">
+          <source src="/cancion/cancion.mp3" type="audio/mpeg">
+        </audio>
+        <button class="btn" id="toggleLoop">Loop: off</button>
+        <button class="btn ghost" id="muteBtn">Silenciar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Botón flotante para activar sonido si lo bloquea el navegador -->
+  <button class="autoplay-tip" id="enableSound">🔊 Activar música</button>
+
+  <footer>Hecho con 💖💖 por Sergio para Mariana — 2025</footer>
+</body>
+
+</html>
