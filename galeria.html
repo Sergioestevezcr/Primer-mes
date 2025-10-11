@@ -113,6 +113,22 @@
         window.UPLOAD_PRESET = "web-galeria";
     </script>
     <script src="script.js" defer></script>
+    <script>
+        // Recuperar el modo y el mood actuales
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        const savedMood = localStorage.getItem('mood') || '';
+
+        // Aplicar al body
+        document.body.classList.add(savedTheme);
+        if (savedMood) document.body.classList.add(`mood-${savedMood}`);
+
+        // Mantener la música si viene del index
+        const bgMusic = parent?.document?.getElementById("bgMusic");
+        if (bgMusic) {
+            bgMusic.play().catch(() => { });
+        }
+    </script>
+
 
 </body>
 

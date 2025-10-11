@@ -437,7 +437,10 @@ setInterval(tickAll, 1000);
     fig.dataset.type = m.resource_type;
     fig.dataset.tags = (m.tags || []).join(",");
 
-    const caption = m.context?.custom?.caption || "Sin descripción 💬";
+    const caption =
+      m.context?.custom?.caption ||
+      m.context?.caption ||
+      "Sin descripción 💬";
     const categories = (m.tags && m.tags.length) ? m.tags.join(", ") : "otros";
 
     // Imagen o video
