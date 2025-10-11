@@ -69,8 +69,11 @@
         </figure>
         <button class="lb-next" id="lbNext" aria-label="Siguiente">›</button>
     </div>
-
-    <script src="script.js"></script>
+    <script>
+        window.CLOUD_NAME = "{{CLOUD_NAME}}";
+        window.UPLOAD_PRESET = "{{UPLOAD_PRESET}}";
+    </script>
+    <script src="script.js" defer></script>
 </body>
 
 </html>
