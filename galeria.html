@@ -42,14 +42,14 @@
             <span class="close-modal" id="closeModalBtn">✕</span>
             <h2>Agregar un nuevo recuerdo 💖</h2>
             <form id="uplForm" class="uploader" autocomplete="off">
-                <input type="file" id="uplInput" accept="image/*,video/mp4" multiple hidden>
+                <input type="file" id="uplInput" accept="image/*,video/mp4" multiple style="display:none">
                 <div class="preview-box" id="previewBox">
                     <img id="previewImg" alt="Vista previa" class="hidden">
                     <video id="previewVideo" controls class="hidden"></video>
                 </div>
 
                 <div class="upload-controls">
-                    <button type="button" class="btn" id="uplBtn">Seleccionar archivo</button>
+                    <label for="uplInput" class="btn" id="uplBtn">Seleccionar archivo</label>
 
                     <select id="uplCategory" class="chip">
                         <option value="nosotros">Nosotros</option>

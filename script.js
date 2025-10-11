@@ -423,6 +423,15 @@ setInterval(tickAll, 1000);
       previewImg.classList.add("hidden");
     }
   });
+  // =========================
+  // 📂 Seleccionar archivo manualmente
+  // =========================
+  if (uplBtn && uplInput) {
+    uplBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      uplInput.click(); // fuerza la apertura del selector de archivos
+    });
+  }
 
   // =========================
   // ☁️ Subir archivo a Cloudinary
