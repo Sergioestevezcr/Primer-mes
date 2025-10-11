@@ -424,10 +424,10 @@ setInterval(tickAll, 1000);
   }
 
   // =========================
-  // 🧩 Crear la tarjeta visual
+  // 🖼️ Crear la tarjeta visual con descripción + botones
   // =========================
   function appendMedia(m) {
-    // guarda estado
+    // Guardar en memoria local
     mediaById.set(m.public_id, m);
 
     const fig = document.createElement("figure");
@@ -439,23 +439,35 @@ setInterval(tickAll, 1000);
     const caption = m.context?.custom?.caption || "Sin descripción 💬";
     const categories = (m.tags && m.tags.length) ? m.tags.join(", ") : "otros";
 
-    const inner = m.resource_type === "video"
-      ? `<video src="${m.secure_url}" poster="${m.thumbnail_url || ''}" playsinline controls></video>`
-      : `<img src="${m.secure_url}" alt="${caption}" loading="lazy">`;
+    // Imagen o video
+    const inner =
+      m.resource_type === "video"
+        ? `<video src="${m.secure_url}" poster="${m.thumbnail_url || ''}" playsinline controls></video>`
+        : `<img src="${m.secure_url}" alt="${caption}" loading="lazy">`;
 
+    // Estructura visual completa
     fig.innerHTML = `
-      ${inner}
-      <figcaption>
-        <strong class="cat-label">📁 ${categories}</strong><br>
-        <span class="desc-text">${caption}</span>
-        <div class="media-actions">
-          <button class="btn-mini btn-edit" data-id="${m.public_id}">✏️ Editar</button>
-          <button class="btn-mini btn-delete" data-id="${m.public_id}">🗑️ Eliminar</button>
-        </div>
-      </figcaption>
-    `;
+    ${inner}
+    <figcaption>
+      <strong class="cat-label">📁 ${categories}</strong><br>
+      <span class="desc-text">${caption}</span>
+      <div class="media-actions">
+        <button class="btn-mini btn-edit" data-id="${m.public_id}" title="Editar">✏️ Editar</button>
+        <button class="btn-mini btn-delete" data-id="${m.public_id}" title="Eliminar">🗑️ Eliminar</button>
+      </div>
+    </figcaption>
+  `;
 
     grid.prepend(fig);
+
+    // Clicks en imagen o video → abrir lightbox
+    const mediaEl = fig.querySelector("img, video");
+    if (mediaEl) {
+      mediaEl.addEventListener("click", (e) => {
+        if (e.target.closest(".media-actions")) return; // evita conflicto con botones
+        openLightboxById(m.public_id);
+      });
+    }
   }
 
   // =========================
