@@ -329,273 +329,67 @@ setInterval(tickAll, 1000);
 
 
 // =========================
-// 🌸 GALERÍA CLOUDINARY COMPLETA
+// 🖼️ GALERÍA CON MODAL + CLOUDINARY (completa)
 // =========================
 (function initGalleryCloudinary() {
   const grid = document.getElementById("galleryGrid");
   if (!grid) return;
 
-  // Elementos de subida
+  // ---- Modal subir
   const openModal = document.getElementById("openModalBtn");
   const modal = document.getElementById("uploadModal");
   const closeModal = document.getElementById("closeModalBtn");
+
   const uplForm = document.getElementById("uplForm");
   const uplBtn = document.getElementById("uplBtn");
   const uplInput = document.getElementById("uplInput");
-  const uplCat = document.getElementById("uplCategory");
-  const uplCap = document.getElementById("uplCaption");
+  const uplCap = document.getElementById("uplCaption");     // descripción
+  const uplCat = document.getElementById("uplCategory");    // categorías (usa coma para varias)
+
+  // ---- Preview
+  const previewBox = document.getElementById("previewBox");
   const previewImg = document.getElementById("previewImg");
   const previewVideo = document.getElementById("previewVideo");
 
-  // Cloudinary
-  const CLOUD_NAME = window.CLOUD_NAME;
-  const UPLOAD_PRESET = window.UPLOAD_PRESET;
-  const listURL = "/.netlify/functions/listMedia";
-  const endpoint = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`;
-
-  // Modal control
-  openModal.addEventListener("click", () => modal.classList.remove("hidden"));
-  closeModal.addEventListener("click", () => modal.classList.add("hidden"));
-  window.addEventListener("click", e => {
-    if (e.target === modal) modal.classList.add("hidden");
-  });
-
-  // =========================
-  // 🔁 Cargar galería
-  // =========================
-  async function loadGallery() {
-    try {
-      const res = await fetch(listURL);
-      const data = await res.json();
-      grid.innerHTML = "";
-      data.forEach(m => appendMedia(m));
-    } catch (err) {
-      console.error("Error al cargar galería", err);
-    }
-  }
-
-  // =========================
-  // 🖼️ Crear elemento visual
-  // =========================
-  function appendMedia(m) {
-    const fig = document.createElement("figure");
-    fig.className = "gitem";
-    fig.dataset.id = m.public_id;
-    fig.dataset.tags = (m.tags || []).join(",");
-    fig.dataset.type = m.resource_type;
-
-    const caption = m.context?.custom?.caption || "";
-    const category = (m.tags && m.tags.join(", ")) || "otros";
-
-    const inner = m.resource_type === "video"
-      ? `<video src="${m.secure_url}" poster="${m.thumbnail_url || ''}" controls></video>`
-      : `<img src="${m.secure_url}" alt="${caption}" loading="lazy">`;
-
-    fig.innerHTML = `
-      ${inner}
-      <figcaption><strong>${category}</strong><br>${caption}</figcaption>
-      <div class="photo-actions">
-        <button class="btn-edit" data-id="${m.public_id}" title="Editar">✏️</button>
-        <button class="btn-delete" data-id="${m.public_id}" title="Eliminar">🗑️</button>
-      </div>
-    `;
-
-    // Al hacer clic: abrir en grande
-    fig.querySelector("img, video").addEventListener("click", () => openLightbox(m));
-
-    grid.prepend(fig);
-  }
-
-  // =========================
-  // 🎚️ Preview de subida
-  // =========================
-  uplInput.addEventListener("change", e => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const url = URL.createObjectURL(file);
-    if (file.type.startsWith("image/")) {
-      previewImg.src = url;
-      previewImg.classList.remove("hidden");
-      previewVideo.classList.add("hidden");
-    } else if (file.type.startsWith("video/")) {
-      previewVideo.src = url;
-      previewVideo.classList.remove("hidden");
-      previewImg.classList.add("hidden");
-    }
-  });
-  // =========================
-  // 📂 Seleccionar archivo manualmente
-  // =========================
-  if (uplBtn && uplInput) {
-    uplBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      uplInput.click(); // fuerza la apertura del selector de archivos
-    });
-  }
-
-  // =========================
-  // ☁️ Subir archivo a Cloudinary
-  // =========================
-  uplForm.addEventListener("submit", async e => {
-    e.preventDefault();
-    const files = Array.from(uplInput.files || []);
-    if (!files.length) return alert("Selecciona un archivo primero");
-
-    for (const file of files) {
-      const cat = uplCat?.value || "otros";
-      const desc = uplCap?.value.trim() || "";
-      const form = new FormData();
-      form.append("file", file);
-      form.append("upload_preset", UPLOAD_PRESET);
-      form.append("context", `caption=${desc}`);
-      form.append("tags", cat);
-
-      uplBtn.disabled = true;
-      const prev = uplBtn.textContent;
-      uplBtn.textContent = "Subiendo...";
-
-      try {
-        const res = await fetch(endpoint, { method: "POST", body: form });
-        const data = await res.json();
-        appendMedia(data);
-        showSuccessToast("💖 Recuerdo subido con éxito");
-      } catch (err) {
-        console.error(err);
-        alert("⚠️ No se pudo subir el archivo");
-      } finally {
-        uplBtn.disabled = false;
-        uplBtn.textContent = prev;
-      }
-    }
-
-    uplInput.value = "";
-    uplCap.value = "";
-    previewImg.classList.add("hidden");
-    previewVideo.classList.add("hidden");
-    modal.classList.add("hidden");
-  });
-
-  // =========================
-  // 🔍 Lightbox
-  // =========================
+  // ---- Lightbox
   const lightbox = document.getElementById("lightbox");
   const lbImg = document.getElementById("lbImg");
   const lbVideo = document.getElementById("lbVideo");
   const lbCap = document.getElementById("lbCap");
   const lbClose = document.getElementById("lbClose");
+  const lbPrev = document.getElementById("lbPrev");
+  const lbNext = document.getElementById("lbNext");
 
-  function openLightbox(m) {
-    lightbox.classList.remove("hidden");
-    const caption = m.context?.custom?.caption || "";
-    if (m.resource_type === "video") {
-      lbImg.classList.add("hidden");
-      lbVideo.classList.remove("hidden");
-      lbVideo.src = m.secure_url;
-    } else {
-      lbVideo.classList.add("hidden");
-      lbImg.classList.remove("hidden");
-      lbImg.src = m.secure_url;
-    }
-    lbCap.textContent = caption;
-  }
-
-  lbClose.addEventListener("click", () => lightbox.classList.add("hidden"));
-  lightbox.addEventListener("click", e => {
-    if (e.target === lightbox) lightbox.classList.add("hidden");
-  });
-
-  // =========================
-  // ✏️ Editar y 🗑️ Eliminar
-  // =========================
+  // ---- Modal edición
   const editModal = document.getElementById("editModal");
+  const editPreview = document.getElementById("editPreview");
   const editDesc = document.getElementById("editDesc");
   const editTags = document.getElementById("editTags");
   const saveEditBtn = document.getElementById("saveEditBtn");
   const deleteBtn = document.getElementById("deleteBtn");
   const cancelEditBtn = document.getElementById("cancelEditBtn");
 
-  let currentEdit = null;
+  // ---- Config Cloudinary (inyectadas en HTML)
+  const CLOUD_NAME = window.CLOUD_NAME;
+  const UPLOAD_PRESET = window.UPLOAD_PRESET;
+  const endpoint = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`;
+  const listURL = "/.netlify/functions/listMedia";
+  const editURL = "/.netlify/functions/editMedia";
+  const deleteURL = "/.netlify/functions/deleteMedia";
 
-  // Abrir modal de edición
-  document.addEventListener("click", e => {
-    const btn = e.target.closest(".btn-edit");
-    if (!btn) return;
-    const id = btn.dataset.id;
-    const fig = document.querySelector(`.gitem[data-id="${id}"]`);
-    if (!fig) return;
+  // Estado
+  const mediaById = new Map(); // public_id -> objeto media
+  let lightboxOrder = []; // ids visibles, para prev/next
+  let currentIdx = -1;    // índice en lightboxOrder
 
-    currentEdit = { id };
-    const cap = fig.querySelector("figcaption");
-    editDesc.value = cap.innerText.split("\n")[1] || "";
-    editTags.value = fig.dataset.tags || "";
-    document.getElementById("editPreview").src = fig.querySelector("img")?.src || "";
-    editModal.classList.remove("hidden");
-  });
+  // ---------- Helpers ----------
+  const tagsFromInput = (str) =>
+    (str || "")
+      .split(",")
+      .map(s => s.trim())
+      .filter(Boolean);
 
-  cancelEditBtn.addEventListener("click", () => {
-    editModal.classList.add("hidden");
-    currentEdit = null;
-  });
-
-  saveEditBtn.addEventListener("click", async () => {
-    if (!currentEdit) return;
-    const caption = editDesc.value.trim();
-    const tags = editTags.value.split(",").map(t => t.trim()).filter(Boolean);
-
-    await fetch("/.netlify/functions/editMedia", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: currentEdit.id, caption, tags }),
-    });
-
-    const fig = document.querySelector(`.gitem[data-id="${currentEdit.id}"]`);
-    if (fig) {
-      const cap = fig.querySelector("figcaption");
-      cap.innerHTML = `<strong>${tags.join(", ")}</strong><br>${caption}`;
-      fig.dataset.tags = tags.join(",");
-    }
-
-    showSuccessToast("💫 Recuerdo actualizado");
-    editModal.classList.add("hidden");
-    currentEdit = null;
-  });
-
-  deleteBtn.addEventListener("click", async () => {
-    if (!currentEdit) return;
-    if (!confirm("¿Seguro que deseas eliminar este recuerdo?")) return;
-
-    await fetch("/.netlify/functions/deleteMedia", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: currentEdit.id }),
-    });
-
-    const fig = document.querySelector(`.gitem[data-id="${currentEdit.id}"]`);
-    if (fig) fig.remove();
-    showSuccessToast("🗑️ Recuerdo eliminado");
-    editModal.classList.add("hidden");
-    currentEdit = null;
-  });
-
-  // =========================
-  // 🔖 Filtros por categoría
-  // =========================
-  document.querySelectorAll("#filterChips .chip").forEach(chip => {
-    chip.addEventListener("click", () => {
-      document.querySelectorAll("#filterChips .chip").forEach(c => c.classList.remove("is-active"));
-      chip.classList.add("is-active");
-      const filter = chip.dataset.filter;
-      document.querySelectorAll(".gitem").forEach(item => {
-        const tags = item.dataset.tags.split(",");
-        item.style.display = (filter === "*" || tags.includes(filter)) ? "" : "none";
-      });
-    });
-  });
-
-  // =========================
-  // ✅ Toast de confirmación
-  // =========================
-  function showSuccessToast(message) {
+  function showSuccessToast(message = "Hecho 💞") {
     let toast = document.querySelector(".success-toast");
     if (!toast) {
       toast = document.createElement("div");
@@ -608,7 +402,345 @@ setInterval(tickAll, 1000);
     setTimeout(() => toast.classList.remove("show", "hide"), 2500);
   }
 
-  // Iniciar
+  // ---------- Carga inicial ----------
+  async function loadGallery() {
+    try {
+      const res = await fetch(listURL);
+      const arr = await res.json();
+      grid.innerHTML = "";
+      mediaById.clear();
+      arr.forEach(m => appendMedia(m));
+      rebuildLightboxOrder(); // para navegación prev/next
+    } catch (err) {
+      console.error("Error al cargar galería", err);
+    }
+  }
+
+  // reconstruir orden según elementos visibles
+  function rebuildLightboxOrder() {
+    lightboxOrder = Array.from(grid.querySelectorAll(".gitem"))
+      .filter(el => el.style.display !== "none")
+      .map(el => el.dataset.id);
+  }
+
+  // =========================
+  // 🧩 Crear la tarjeta visual
+  // =========================
+  function appendMedia(m) {
+    // guarda estado
+    mediaById.set(m.public_id, m);
+
+    const fig = document.createElement("figure");
+    fig.className = "gitem";
+    fig.dataset.id = m.public_id;
+    fig.dataset.type = m.resource_type;
+    fig.dataset.tags = (m.tags || []).join(",");
+
+    const caption = m.context?.custom?.caption || "Sin descripción 💬";
+    const categories = (m.tags && m.tags.length) ? m.tags.join(", ") : "otros";
+
+    const inner = m.resource_type === "video"
+      ? `<video src="${m.secure_url}" poster="${m.thumbnail_url || ''}" playsinline controls></video>`
+      : `<img src="${m.secure_url}" alt="${caption}" loading="lazy">`;
+
+    fig.innerHTML = `
+      ${inner}
+      <figcaption>
+        <strong class="cat-label">📁 ${categories}</strong><br>
+        <span class="desc-text">${caption}</span>
+        <div class="media-actions">
+          <button class="btn-mini btn-edit" data-id="${m.public_id}">✏️ Editar</button>
+          <button class="btn-mini btn-delete" data-id="${m.public_id}">🗑️ Eliminar</button>
+        </div>
+      </figcaption>
+    `;
+
+    grid.prepend(fig);
+  }
+
+  // =========================
+  // 🔍 Lightbox (abrir / navegar / cerrar)
+  // =========================
+  function openLightboxById(id) {
+    const m = mediaById.get(id);
+    if (!m) return;
+
+    lightbox.classList.remove("hidden");
+    lbCap.textContent = m.context?.custom?.caption || "Sin descripción 💬";
+
+    if (m.resource_type === "video") {
+      lbImg.style.display = "none";
+      lbVideo.style.display = "block";
+      lbVideo.src = m.secure_url;
+      lbVideo.load();
+      lbVideo.play().catch(() => { });
+    } else {
+      lbVideo.pause();
+      lbVideo.removeAttribute("src");
+      lbVideo.style.display = "none";
+      lbImg.style.display = "block";
+      lbImg.src = m.secure_url;
+    }
+
+    currentIdx = lightboxOrder.indexOf(id);
+  }
+
+  function closeLightbox() {
+    lightbox.classList.add("hidden");
+    try { lbVideo.pause(); lbVideo.removeAttribute("src"); lbVideo.load(); } catch (_) { }
+    currentIdx = -1;
+  }
+
+  function showDir(dir) {
+    if (!lightboxOrder.length) return;
+    currentIdx = (currentIdx + dir + lightboxOrder.length) % lightboxOrder.length;
+    openLightboxById(lightboxOrder[currentIdx]);
+  }
+
+  // clicks en controles lightbox
+  lbClose?.addEventListener("click", closeLightbox);
+  lightbox?.addEventListener("click", (e) => { if (e.target === lightbox) closeLightbox(); });
+  lbPrev?.addEventListener("click", () => showDir(-1));
+  lbNext?.addEventListener("click", () => showDir(+1));
+  window.addEventListener("keydown", (e) => {
+    if (lightbox.classList.contains("hidden")) return;
+    if (e.key === "Escape") closeLightbox();
+    if (e.key === "ArrowLeft") showDir(-1);
+    if (e.key === "ArrowRight") showDir(+1);
+  }, { passive: true });
+
+  // =========================
+  // 🧑‍💻 Delegación de eventos en GRID
+  // =========================
+  grid.addEventListener("click", (e) => {
+    const card = e.target.closest(".gitem");
+    if (!card) return;
+
+    // abrir lightbox (click en imagen/video)
+    if (e.target.tagName === "IMG" || e.target.tagName === "VIDEO") {
+      openLightboxById(card.dataset.id);
+      return;
+    }
+
+    // editar
+    const editBtn = e.target.closest(".btn-edit");
+    if (editBtn) {
+      e.stopPropagation();
+      openEditModal(editBtn.dataset.id);
+      return;
+    }
+
+    // eliminar
+    const delBtn = e.target.closest(".btn-delete");
+    if (delBtn) {
+      e.stopPropagation();
+      confirmDelete(delBtn.dataset.id);
+      return;
+    }
+  });
+
+  // =========================
+  // ✏️ Modal de edición
+  // =========================
+  function openEditModal(id) {
+    const m = mediaById.get(id);
+    if (!m) return;
+    editPreview.src = m.secure_url;
+    editDesc.value = m.context?.custom?.caption || "";
+    editTags.value = (m.tags || []).join(", ");
+    editModal.classList.remove("hidden");
+
+    // guardar
+    saveEditBtn.onclick = async () => {
+      const caption = editDesc.value.trim();
+      const tags = tagsFromInput(editTags.value);
+
+      try {
+        const res = await fetch(editURL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            public_id: m.public_id,
+            resource_type: m.resource_type,
+            caption,
+            tags
+          })
+        });
+        if (!res.ok) throw new Error("edit failed");
+
+        // actualiza UI local
+        m.context = m.context || {};
+        m.context.custom = m.context.custom || {};
+        m.context.custom.caption = caption;
+        m.tags = tags;
+
+        const fig = grid.querySelector(`.gitem[data-id="${m.public_id}"]`);
+        if (fig) {
+          fig.dataset.tags = tags.join(",");
+          const fc = fig.querySelector("figcaption");
+          if (fc) {
+            fc.querySelector(".cat-label").textContent = `📁 ${tags.length ? tags.join(", ") : "otros"}`;
+            fc.querySelector(".desc-text").textContent = caption || "Sin descripción 💬";
+          }
+        }
+        rebuildLightboxOrder();
+        showSuccessToast("🩷 Cambios guardados");
+        editModal.classList.add("hidden");
+      } catch (err) {
+        console.error(err);
+        alert("⚠️ No se pudo actualizar la información");
+      }
+    };
+
+    // cancelar
+    cancelEditBtn.onclick = () => editModal.classList.add("hidden");
+
+    // eliminar (desde modal)
+    deleteBtn.onclick = () => confirmDelete(id);
+  }
+
+  // cerrar modal edición al hacer click fuera
+  editModal.addEventListener("click", (e) => { if (e.target === editModal) editModal.classList.add("hidden"); });
+
+  // =========================
+  // 🗑️ Eliminar
+  // =========================
+  async function confirmDelete(id) {
+    const m = mediaById.get(id);
+    if (!m) return;
+    if (!confirm("¿Seguro que quieres eliminar este recuerdo? 🥺")) return;
+
+    try {
+      const res = await fetch(deleteURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          public_id: m.public_id,
+          resource_type: m.resource_type
+        })
+      });
+      if (!res.ok) throw new Error("delete failed");
+
+      const fig = grid.querySelector(`.gitem[data-id="${m.public_id}"]`);
+      if (fig) fig.remove();
+      mediaById.delete(m.public_id);
+      rebuildLightboxOrder();
+      showSuccessToast("🗑️ Eliminado con éxito");
+      editModal.classList.add("hidden");
+    } catch (err) {
+      console.error(err);
+      alert("⚠️ No se pudo eliminar");
+    }
+  }
+
+  // =========================
+  // 🌸 Modal subir (abrir/cerrar)
+  // =========================
+  openModal?.addEventListener("click", () => modal.classList.remove("hidden"));
+  closeModal?.addEventListener("click", () => modal.classList.add("hidden"));
+  window.addEventListener("click", (e) => { if (e.target === modal) modal.classList.add("hidden"); });
+
+  // =========================
+  // 🎚️ Preview de subida
+  // =========================
+  uplInput.addEventListener("change", e => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    if (file.type.startsWith("image/")) {
+      previewImg.src = url;
+      previewImg.classList.remove("hidden");
+      previewVideo.classList.add("hidden");
+    } else if (file.type.startsWith("video/")) {
+      previewVideo.src = url;
+      previewVideo.classList.remove("hidden");
+      previewImg.classList.add("hidden");
+    }
+  });
+
+  // abrir selector de archivo
+  uplBtn?.addEventListener("click", (e) => {
+    e.preventDefault();
+    uplInput.click();
+  });
+
+  // =========================
+  // ☁️ Subir a Cloudinary
+  // =========================
+  uplForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const files = Array.from(uplInput.files || []);
+    if (!files.length) return alert("Selecciona un archivo primero");
+
+    // categorías: permite varias separadas por coma (ej: "nosotros,citas")
+    // si tu select es de una sola opción, escribe varias manualmente tipo "nosotros,citas"
+    const catStr = (uplCat?.value || "otros");
+    const tags = tagsFromInput(catStr);
+    const desc = uplCap?.value.trim() || "";
+
+    for (const file of files) {
+      if (!(file.type.startsWith("image/") || file.type === "video/mp4")) {
+        alert("Formato no permitido (solo imágenes o MP4)");
+        continue;
+      }
+      if (file.size > 10 * 1024 * 1024) {
+        alert("Máximo 10MB");
+        continue;
+      }
+
+      const form = new FormData();
+      form.append("file", file);
+      form.append("upload_preset", UPLOAD_PRESET);
+      form.append("context", `caption=${desc}`);
+      form.append("tags", tags.join(",")); // varias categorías
+
+      uplBtn.disabled = true;
+      const prev = uplBtn.textContent;
+      uplBtn.textContent = "Subiendo...";
+
+      try {
+        const res = await fetch(endpoint, { method: "POST", body: form });
+        if (!res.ok) throw new Error("upload failed");
+        const data = await res.json();
+        appendMedia(data);
+        rebuildLightboxOrder();
+        showSuccessToast("💖 Recuerdo subido con éxito");
+      } catch (err) {
+        console.error(err);
+        alert("⚠️ No se pudo subir el archivo");
+      } finally {
+        uplBtn.disabled = false;
+        uplBtn.textContent = prev;
+      }
+    }
+
+    // limpiar modal
+    uplInput.value = "";
+    uplCap.value = "";
+    previewImg.classList.add("hidden");
+    previewVideo.classList.add("hidden");
+    modal.classList.add("hidden");
+  });
+
+  // =========================
+  // 🔖 Filtros por categoría
+  // =========================
+  const chips = document.getElementById("filterChips");
+  chips?.addEventListener("click", (e) => {
+    const btn = e.target.closest(".chip");
+    if (!btn) return;
+    chips.querySelectorAll(".chip").forEach(c => c.classList.remove("is-active"));
+    btn.classList.add("is-active");
+    const filter = btn.dataset.filter;
+
+    Array.from(grid.querySelectorAll(".gitem")).forEach(item => {
+      const tags = (item.dataset.tags || "").split(",").map(s => s.trim());
+      item.style.display = (filter === "*" || tags.includes(filter)) ? "" : "none";
+    });
+
+    rebuildLightboxOrder();
+  });
+
+  // 🚀 Go
   loadGallery();
 })();
-

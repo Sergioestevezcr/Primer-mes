@@ -1389,3 +1389,19 @@ body.dark .preview-box::before {
   color: var(--rose-600);
   opacity: 0.8;
 }
+
+.cat-label {
+  color: var(--rose-600);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.desc-text {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  display: block;
+  margin-top: 0.25rem;
+  word-break: break-word;
+  text-align: center;
+}
