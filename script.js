@@ -389,6 +389,16 @@ setInterval(tickAll, 1000);
       .map(s => s.trim())
       .filter(Boolean);
 
+  // 💖 Dispara el corazón flotante
+  function showHeartFloat() {
+    const el = document.createElement('div');
+    el.className = 'heart-float';
+    el.textContent = '💖';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1500);
+  }
+
+  // ✅ Toast de confirmación + corazón
   function showSuccessToast(message = "Hecho 💞") {
     let toast = document.querySelector(".success-toast");
     if (!toast) {
@@ -398,8 +408,9 @@ setInterval(tickAll, 1000);
     }
     toast.textContent = message;
     toast.classList.add("show");
+    showHeartFloat(); // << aquí se dispara la animación
     setTimeout(() => toast.classList.add("hide"), 2000);
-    setTimeout(() => toast.classList.remove("show", "hide"), 2500);
+    setTimeout(() => toast.classList.remove("show", "hide"), 2600);
   }
 
   // ---------- Carga inicial ----------
