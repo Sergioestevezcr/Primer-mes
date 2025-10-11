@@ -11,7 +11,6 @@
 </head>
 
 <body>
-    <!-- fondo (opcional si ya lo usas en index) -->
     <div class="hearts" id="hearts"></div>
 
     <header class="hero" style="min-height:auto;padding:4rem 1rem 2rem">
@@ -20,12 +19,11 @@
         <p class="sub">Un rinconcito con nuestras fotos y videos favoritos. Toca para ver en grande ✨</p>
         <div class="cta">
             <a class="btn ghost" href="index.html">← Volver</a>
+            <button class="btn" id="openModalBtn">➕ Agregar recuerdo</button>
         </div>
     </header>
 
     <section class="container" style="padding:1rem 1rem 3rem">
-
-        <!-- Filtros -->
         <div class="chips" id="filterChips" aria-label="Filtros">
             <button class="chip is-active" data-filter="*">Todo</button>
             <button class="chip" data-filter="nosotros">Nosotros</button>
@@ -35,44 +33,84 @@
             <button class="chip" data-filter="videos">Videos</button>
         </div>
 
-        <!-- Subidor -->
-        <form id="uplForm" class="uploader" autocomplete="off">
-            <input type="file" id="uplInput" accept="image/*,video/mp4" multiple hidden>
-            <button type="button" class="btn" id="uplBtn">Subir fotos / videos</button>
-            <span class="uhelp">Formatos: JPG/PNG/WEBP/GIF o MP4. Máx 10MB.</span>
-        </form>
-
-        <!-- Grid -->
-        <div class="gallery-grid" id="galleryGrid">
-            <!-- Ejemplos locales opcionales (puedes borrar):
-      <figure class="gitem" data-tags="nosotros,citas">
-        <img src="/images/Img1.jpg" alt="Noche bonita" loading="lazy">
-        <figcaption>Noche bonita</figcaption>
-      </figure>
-      <figure class="gitem" data-tags="videos" data-type="video"
-              data-src="/videos/clip1.mp4" data-poster="/images/clip1-thumb.jpg">
-        <img src="/images/clip1-thumb.jpg" alt="Bailando" loading="lazy">
-        <figcaption>Bailando</figcaption>
-      </figure>
-      -->
-        </div>
+        <div class="gallery-grid" id="galleryGrid"></div>
     </section>
 
-    <!-- Lightbox -->
+    <!-- 🌸 Modal de subida -->
+    <div id="uploadModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModalBtn">✕</span>
+            <h2>Agregar un nuevo recuerdo 💖</h2>
+            <form id="uplForm" class="uploader" autocomplete="off">
+                <input type="file" id="uplInput" accept="image/*,video/mp4" multiple hidden>
+                <div class="preview-box" id="previewBox">
+                    <img id="previewImg" alt="Vista previa" class="hidden">
+                    <video id="previewVideo" controls class="hidden"></video>
+                </div>
+
+                <div class="upload-controls">
+                    <button type="button" class="btn" id="uplBtn">Seleccionar archivo</button>
+
+                    <select id="uplCategory" class="chip">
+                        <option value="nosotros">Nosotros</option>
+                        <option value="citas">Citas</option>
+                        <option value="selfies">Selfies</option>
+                        <option value="familia">Familia</option>
+                        <option value="videos">Videos</option>
+                    </select>
+
+                    <input type="text" id="uplCaption" placeholder="Descripción (opcional)" class="chip"
+                        style="width:200px;">
+                </div>
+
+                <div class="modal-actions">
+                    <button type="submit" class="btn">Subir</button>
+                </div>
+                <p class="uhelp">Formatos: JPG/PNG/WEBP/GIF o MP4. Máx 10MB.</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- 🔍 Lightbox para ver imágenes -->
     <div class="lightbox hidden" id="lightbox" aria-hidden="true" role="dialog" aria-label="Visor de fotos">
         <button class="lb-close" id="lbClose" aria-label="Cerrar">✕</button>
         <button class="lb-prev" id="lbPrev" aria-label="Anterior">‹</button>
         <figure class="lb-frame">
             <img id="lbImg" alt="" />
-            <video id="lbVideo" controls playsinline></video>
+            <video id="lbVideo" controls playsinline class="hidden"></video>
             <figcaption id="lbCap"></figcaption>
         </figure>
         <button class="lb-next" id="lbNext" aria-label="Siguiente">›</button>
     </div>
+
+    <!-- ✏️ Modal para editar recuerdos -->
+    <div id="editModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Editar recuerdo 💫</h2>
+            <form id="editForm">
+                <div class="preview-box">
+                    <img id="editPreview" src="" alt="Vista previa" />
+                </div>
+
+                <label for="editDesc">Descripción:</label>
+                <textarea id="editDesc" placeholder="Nueva descripción..." rows="3"></textarea>
+
+                <label for="editTags">Categorías:</label>
+                <input id="editTags" type="text" placeholder="Ej: nosotros, citas, selfies" />
+
+                <div class="modal-actions">
+                    <button type="button" id="saveEditBtn" class="btn">Guardar cambios 💾</button>
+                    <button type="button" id="deleteBtn" class="btn ghost">Eliminar 🗑️</button>
+                    <button type="button" id="cancelEditBtn" class="btn ghost">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ⚙️ Scripts -->
     <script>
-        // Reemplaza con tus valores reales de Cloudinary
-        window.CLOUD_NAME = "dqkppmcey";      // tu cloud_name
-        window.UPLOAD_PRESET = "web-galeria"; // tu upload_preset
+        window.CLOUD_NAME = "dqkppmcey";
+        window.UPLOAD_PRESET = "web-galeria";
     </script>
     <script src="script.js" defer></script>
 
