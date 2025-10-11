@@ -447,7 +447,7 @@ setInterval(tickAll, 1000);
   }, { passive: true });
 })();
 // =========================
-//   GALERÍA: filtros + lightbox + subida Cloudinary
+//   GALERÍA COMPLETA (filtros + lightbox + subida Cloudinary)
 // =========================
 (function initGallery() {
   const grid = document.getElementById('galleryGrid');
@@ -536,18 +536,15 @@ setInterval(tickAll, 1000);
     if (e.key === 'ArrowRight') showDir(+1);
   }, { passive: true });
 
-  // ----- Uploader (Cloudinary unsigned, endpoint 'auto')
+  // ----- Subida a Cloudinary (unsigned preset)
   const uplForm = document.getElementById('uplForm');
   const uplInput = document.getElementById('uplInput');
   const uplBtn = document.getElementById('uplBtn');
 
-  // ⚠️ Rellena con tus valores reales
-  const CLOUD_NAME = 'TU_CLOUD_NAME';
-  const UPLOAD_PRESET = 'TU_UPLOAD_PRESET';
-
+  const CLOUD_NAME = 'TU_CLOUD_NAME';        // 👈 tu cloud_name real
+  const UPLOAD_PRESET = 'TU_UPLOAD_PRESET';  // 👈 tu upload_preset configurado
   const endpoint = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`;
 
-  // Helper: crear <figure> y añadirlo al grid
   function appendMediaToGrid({ url, type, caption, poster }) {
     const fig = document.createElement('figure');
     fig.className = 'gitem';
@@ -570,7 +567,7 @@ setInterval(tickAll, 1000);
     fc.textContent = caption || (type === 'video' ? 'Nuevo video' : 'Nueva foto');
     fig.appendChild(fc);
 
-    grid.prepend(fig); // al inicio
+    grid.prepend(fig);
   }
 
   if (uplBtn && uplInput) {
@@ -587,29 +584,29 @@ setInterval(tickAll, 1000);
         const formData = new FormData();
         formData.append('file', file);
         formData.append('upload_preset', UPLOAD_PRESET);
-        // Si no pusiste folder en el preset:
-        // formData.append('folder', 'galeria');
 
-        uplBtn.disabled = true; const prevLabel = uplBtn.textContent;
+        uplBtn.disabled = true;
+        const prevLabel = uplBtn.textContent;
         uplBtn.textContent = 'Subiendo...';
+
         try {
           const res = await fetch(endpoint, { method: 'POST', body: formData });
-          if (!res.ok) throw new Error('Error subiendo');
+          if (!res.ok) throw new Error('Error al subir');
           const data = await res.json();
 
           const isVideo = data.resource_type === 'video';
-          const entry = {
+          appendMediaToGrid({
             url: data.secure_url,
             type: isVideo ? 'video' : 'image',
             caption: file.name,
             poster: data.thumbnail_url || (isVideo ? data.secure_url + '#t=0.1' : '')
-          };
-          appendMediaToGrid(entry);
+          });
         } catch (err) {
           console.error(err);
           alert('No se pudo subir. Intenta de nuevo.');
         } finally {
-          uplBtn.disabled = false; uplBtn.textContent = prevLabel;
+          uplBtn.disabled = false;
+          uplBtn.textContent = prevLabel;
         }
       }
       uplInput.value = '';

@@ -20,8 +20,14 @@ export async function handler() {
             type: r.resource_type,
         }));
 
-        return { statusCode: 200, body: JSON.stringify(formatted) };
+        return {
+            statusCode: 200,
+            body: JSON.stringify(formatted),
+        };
     } catch (err) {
-        return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ error: err.message }),
+        };
     }
 }

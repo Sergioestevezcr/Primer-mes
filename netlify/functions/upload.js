@@ -7,6 +7,10 @@ cloudinary.config({
 });
 
 export async function handler(event) {
+    if (event.httpMethod !== 'POST') {
+        return { statusCode: 405, body: 'Method Not Allowed' };
+    }
+
     try {
         const body = JSON.parse(event.body);
         const file = body.file;
@@ -26,6 +30,9 @@ export async function handler(event) {
             }),
         };
     } catch (err) {
-        return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ error: err.message }),
+        };
     }
 }

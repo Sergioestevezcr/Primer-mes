@@ -7,6 +7,10 @@ cloudinary.config({
 });
 
 export async function handler(event) {
+    if (event.httpMethod !== 'DELETE' && event.httpMethod !== 'POST') {
+        return { statusCode: 405, body: 'Method Not Allowed' };
+    }
+
     try {
         const { id } = JSON.parse(event.body);
         const result = await cloudinary.uploader.destroy(id, { resource_type: 'auto' });
