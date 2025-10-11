@@ -1586,5 +1586,75 @@ body.dark .heart-float {
 }
 
 /* =========================
+   💖 Modal de edición
+========================= */
+#editModal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 999;
+}
+
+#editModal .lb-frame {
+  background: #fff;
+  color: #222;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  position: relative;
+}
+
+#editModal h3 {
+  margin-bottom: 1rem;
+  color: var(--pink-600);
+  font-weight: 700;
+}
+
+#editModal img {
+  width: 100%;
+  border-radius: 0.8rem;
+  margin-bottom: 1rem;
+  object-fit: cover;
+  max-height: 300px;
+}
+
+#editModal input,
+#editModal textarea {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  margin: 0.4rem 0;
+  border-radius: 0.5rem;
+  border: 1px solid #ddd;
+  font-size: 0.9rem;
+  resize: none;
+}
+
+#editModal .edit-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+#editModal .edit-actions .btn {
+  width: 100%;
+  font-size: 0.9rem;
+  padding: 0.6rem;
+}
+
+@media (max-width: 480px) {
+  #editModal .lb-frame {
+    width: 95%;
+    padding: 1rem;
+  }
+}
+
+/* =========================
    FIN CSS
 ========================= */
