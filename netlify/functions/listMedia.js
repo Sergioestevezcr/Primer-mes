@@ -8,16 +8,14 @@ cloudinary.config({
 
 exports.handler = async () => {
     try {
-        // 📦 Buscar imágenes y videos con contexto (descripción) y tags
         const res = await cloudinary.search
             .expression("(resource_type:image OR resource_type:video)")
             .sort_by("created_at", "desc")
-            .with_field("context") // 👈 asegúrate que este campo esté
-            .with_field("tags")    // 👈 y también las categorías
+            .with_field("context")
+            .with_field("tags")
             .max_results(200)
             .execute();
 
-        // 🧩 Transformar resultados para el frontend
         const mapped = (res.resources || []).map(r => {
             const isVideo = r.resource_type === "video";
             const thumb = isVideo
@@ -28,18 +26,12 @@ exports.handler = async () => {
                 })
                 : r.secure_url;
 
-            // Asegurar que context.custom.caption siempre exista
-            const context = r.context || {};
-            if (!context.custom) context.custom = {};
-            if (!context.custom.caption && r.info?.context?.caption)
-                context.custom.caption = r.info.context.caption;
-
             return {
-                public_id: r.public_id,
+                public_id: r.public_id, // 👈 ESTE ES EL ID QUE NECESITA TU JS
                 secure_url: r.secure_url,
                 resource_type: r.resource_type,
                 tags: r.tags || [],
-                context, // 👈 se envía completo con caption
+                context: r.context || {},
                 thumbnail_url: thumb,
                 created_at: r.created_at,
             };
@@ -54,7 +46,7 @@ exports.handler = async () => {
             body: JSON.stringify(mapped),
         };
     } catch (err) {
-        console.error("❌ Error listando media:", err);
+        console.error("❌ Error listando medios:", err);
         return {
             statusCode: 500,
             headers: { "access-control-allow-origin": "*" },
