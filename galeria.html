@@ -112,39 +112,34 @@
         window.CLOUD_NAME = "dqkppmcey";
         window.UPLOAD_PRESET = "web-galeria";
     </script>
+
     <script src="script.js" defer></script>
+
+    <!-- 🎵 Restaurar sincronización -->
     <script>
-        // Restaura el tema
         const savedTheme = localStorage.getItem('theme') || 'light';
         document.body.classList.add(savedTheme);
 
-        // Restaura el mood
         const savedMood = localStorage.getItem('mood');
         if (savedMood) document.body.classList.add(savedMood);
 
-        // Restaura la música
         const musicSrc = localStorage.getItem('musicSrc');
         const musicTime = parseFloat(localStorage.getItem('musicTime') || '0');
         const wasPlaying = localStorage.getItem('musicPlaying') === 'true';
 
-        if (musicSrc) {
-            const audio = new Audio(musicSrc);
-            audio.id = 'bgMusic';
-            audio.loop = true;
-            audio.volume = 0.6;
-            document.body.appendChild(audio);
-
-            audio.currentTime = musicTime || 0;
-            if (wasPlaying) {
-                audio.play().catch(() => {
-                    console.log("Autoplay bloqueado, el usuario debe interactuar");
-                });
+        // Evitar duplicar audio
+        if (!document.getElementById('audio')) {
+            if (musicSrc) {
+                const audio = new Audio(musicSrc);
+                audio.id = 'audio';
+                audio.loop = true;
+                audio.volume = parseFloat(localStorage.getItem('amor_volume') || 0.6);
+                document.body.appendChild(audio);
+                audio.currentTime = musicTime;
+                if (wasPlaying) audio.play().catch(() => { });
             }
         }
     </script>
-
-
-
 </body>
 
 </html>

@@ -192,7 +192,6 @@
           <input id="volRange" type="range" min="0" max="100" value="60" step="1" />
           <span id="volPct">60%</span>
         </div>
-        <!-- deja el <audio> y los botones tal como los tienes abajo -->
         <audio id="audio" controls preload="none">
           <source src="/cancion/cancion.mp3" type="audio/mpeg">
         </audio>
@@ -201,34 +200,28 @@
       </div>
     </div>
   </section>
+
   <button id="autoplayTip" class="autoplay-tip">🎵 Prender música</button>
-  <!-- Notificación de canción -->
-  <div id="songToast" class="song-toast hidden">
-    🎶 Reproduciendo: <span id="songTitle"></span>
-  </div>
-
-
+  <div id="songToast" class="song-toast hidden">🎶 Reproduciendo: <span id="songTitle"></span></div>
   <footer>Hecho con 💖💖 por Sergio para Mariana — 2025</footer>
+
+  <!-- 🌙 Sincronización global -->
   <script>
-    // Guarda el estado del tema y del mood cuando navegas
-    document.querySelector('a[href="galeria.html"]').addEventListener('click', () => {
+    document.querySelector('a[href="galeria.html"]')?.addEventListener('click', () => {
       const currentTheme = document.body.classList.contains('dark') ? 'dark' : 'light';
       localStorage.setItem('theme', currentTheme);
 
-      const currentMood = Array.from(document.body.classList)
-        .find(cls => cls.startsWith('mood-')) || '';
+      const currentMood = Array.from(document.body.classList).find(c => c.startsWith('mood-')) || '';
       localStorage.setItem('mood', currentMood);
 
-      // También guarda la posición actual de la canción
-      const audio = document.getElementById('bgMusic');
+      const audio = document.getElementById('audio');
       if (audio) {
-        localStorage.setItem('musicTime', audio.currentTime);
         localStorage.setItem('musicSrc', audio.src);
+        localStorage.setItem('musicTime', audio.currentTime);
         localStorage.setItem('musicPlaying', !audio.paused);
       }
     });
   </script>
-
 </body>
 
 </html>
