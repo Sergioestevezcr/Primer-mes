@@ -743,4 +743,35 @@ setInterval(tickAll, 1000);
 
   // 🚀 Go
   loadGallery();
+
+  // 💞 Corazón flotante adaptado al mood actual
+  function showHeartFloat() {
+    const heart = document.createElement("div");
+    heart.className = "heart-float";
+    heart.textContent = "💖";
+
+    // Detectar mood activo en el body
+    const mood = document.body.className.match(/mood-(\w+)/);
+    if (mood) heart.dataset.mood = mood[1];
+
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 1300);
+  }
+
+
+  // ✨ Usar esta función después de subir, editar o eliminar
+  function showSuccessToast(message = "Acción realizada 💫") {
+    let toast = document.querySelector(".success-toast");
+    if (!toast) {
+      toast = document.createElement("div");
+      toast.className = "success-toast";
+      document.body.appendChild(toast);
+    }
+    toast.textContent = message;
+    toast.classList.add("show");
+    showHeartFloat(); // 👈 añade el corazón flotante
+    setTimeout(() => toast.classList.add("hide"), 2000);
+    setTimeout(() => toast.classList.remove("show", "hide"), 2600);
+  }
+
 })();

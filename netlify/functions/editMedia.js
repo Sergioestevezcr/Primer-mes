@@ -10,17 +10,35 @@ exports.handler = async (event) => {
     if (event.httpMethod !== "POST") {
         return { statusCode: 405, body: "Method not allowed" };
     }
+
     try {
-        const { id, caption, tags } = JSON.parse(event.body || "{}");
-        if (!id) {
-            return { statusCode: 400, body: "Missing id" };
+        const { public_id, resource_type, caption, tags } = JSON.parse(event.body || "{}");
+
+        if (!public_id) {
+            return {
+                statusCode: 400,
+                headers: { "access-control-allow-origin": "*" },
+                body: JSON.stringify({ error: "Missing public_id" }),
+            };
         }
 
-        const payload = {};
-        if (caption !== undefined) payload.context = { caption };
-        if (Array.isArray(tags)) payload.tags = tags;
+        const updateData = {};
 
-        const result = await cloudinary.api.update(id, payload);
+        // Guardar descripción como context.custom.caption
+        if (caption !== undefined) {
+            updateData.context = { custom: { caption } };
+        }
+
+        // Actualizar etiquetas
+        if (Array.isArray(tags)) {
+            updateData.tags = tags;
+        }
+
+        // Ejecutar actualización
+        const result = await cloudinary.api.update(public_id, {
+            ...updateData,
+            resource_type: resource_type || "image",
+        });
 
         return {
             statusCode: 200,
@@ -30,14 +48,14 @@ exports.handler = async (event) => {
             },
             body: JSON.stringify({
                 public_id: result.public_id,
-                context: result.context || null,
-                tags: result.tags || [],
-                resource_type: result.resource_type,
                 secure_url: result.secure_url,
+                resource_type: result.resource_type,
+                context: result.context || {},
+                tags: result.tags || [],
             }),
         };
     } catch (err) {
-        console.error(err);
+        console.error("❌ Error updating media:", err);
         return {
             statusCode: 500,
             headers: { "access-control-allow-origin": "*" },

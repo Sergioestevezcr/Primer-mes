@@ -1405,3 +1405,135 @@ body.dark .preview-box::before {
   word-break: break-word;
   text-align: center;
 }
+
+/* =========================
+   💞 Animaciones de feedback
+========================= */
+
+/* 🩷 Fade de éxito */
+.success-toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--pink-500);
+  color: #fff;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 0.8rem 1.6rem;
+  box-shadow: 0 10px 30px rgba(57, 42, 52, 0.25);
+  opacity: 0;
+  z-index: 200;
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.success-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-10px);
+}
+
+.success-toast.hide {
+  opacity: 0;
+  transform: translateX(-50%) translateY(10px);
+}
+
+/* 💫 Fade out de elementos eliminados */
+.gitem.fade-out {
+  animation: fadeOut 0.5s ease forwards;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+/* 💖 Corazón flotante al editar / subir */
+@keyframes floatHeart {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+
+  80% {
+    transform: translateY(-120px) scale(1.3);
+    opacity: 0.7;
+  }
+
+  100% {
+    transform: translateY(-160px) scale(1.1);
+    opacity: 0;
+  }
+}
+
+.heart-float {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem;
+  color: var(--rose-600);
+  z-index: 999;
+  animation: floatHeart 1.2s ease-out forwards;
+}
+
+/* 💞 Botones mini (editar / eliminar) */
+.btn-mini {
+  background: transparent;
+  border: none;
+  color: var(--rose-600);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.2s ease;
+}
+
+.btn-mini:hover {
+  transform: scale(1.2);
+  opacity: 0.8;
+}
+
+.media-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+}
+
+@media (max-width: 640px) {
+  .media-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* =========================
+   💖 Corazones dinámicos por mood
+========================= */
+
+/* Romántica: rosado */
+body.mood-romantica .heart-float {
+  color: #ff7eb3;
+}
+
+/* Bachata: durazno / coral */
+body.mood-bachata .heart-float {
+  color: #ff9566;
+}
+
+/* Chill: violeta / lavanda */
+body.mood-chill .heart-float {
+  color: #a88cff;
+}
+
+/* En modo oscuro, que brille más */
+body.dark .heart-float {
+  text-shadow: 0 0 12px currentColor;
+  opacity: 0.9;
+}
