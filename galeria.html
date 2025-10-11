@@ -114,20 +114,35 @@
     </script>
     <script src="script.js" defer></script>
     <script>
-        // Recuperar el modo y el mood actuales
+        // Restaura el tema
         const savedTheme = localStorage.getItem('theme') || 'light';
-        const savedMood = localStorage.getItem('mood') || '';
-
-        // Aplicar al body
         document.body.classList.add(savedTheme);
-        if (savedMood) document.body.classList.add(`mood-${savedMood}`);
 
-        // Mantener la música si viene del index
-        const bgMusic = parent?.document?.getElementById("bgMusic");
-        if (bgMusic) {
-            bgMusic.play().catch(() => { });
+        // Restaura el mood
+        const savedMood = localStorage.getItem('mood');
+        if (savedMood) document.body.classList.add(savedMood);
+
+        // Restaura la música
+        const musicSrc = localStorage.getItem('musicSrc');
+        const musicTime = parseFloat(localStorage.getItem('musicTime') || '0');
+        const wasPlaying = localStorage.getItem('musicPlaying') === 'true';
+
+        if (musicSrc) {
+            const audio = new Audio(musicSrc);
+            audio.id = 'bgMusic';
+            audio.loop = true;
+            audio.volume = 0.6;
+            document.body.appendChild(audio);
+
+            audio.currentTime = musicTime || 0;
+            if (wasPlaying) {
+                audio.play().catch(() => {
+                    console.log("Autoplay bloqueado, el usuario debe interactuar");
+                });
+            }
         }
     </script>
+
 
 
 </body>

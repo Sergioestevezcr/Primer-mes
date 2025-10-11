@@ -209,6 +209,26 @@
 
 
   <footer>Hecho con 💖💖 por Sergio para Mariana — 2025</footer>
+  <script>
+    // Guarda el estado del tema y del mood cuando navegas
+    document.querySelector('a[href="galeria.html"]').addEventListener('click', () => {
+      const currentTheme = document.body.classList.contains('dark') ? 'dark' : 'light';
+      localStorage.setItem('theme', currentTheme);
+
+      const currentMood = Array.from(document.body.classList)
+        .find(cls => cls.startsWith('mood-')) || '';
+      localStorage.setItem('mood', currentMood);
+
+      // También guarda la posición actual de la canción
+      const audio = document.getElementById('bgMusic');
+      if (audio) {
+        localStorage.setItem('musicTime', audio.currentTime);
+        localStorage.setItem('musicSrc', audio.src);
+        localStorage.setItem('musicPlaying', !audio.paused);
+      }
+    });
+  </script>
+
 </body>
 
 </html>
