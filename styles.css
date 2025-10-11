@@ -1877,6 +1877,73 @@ body.dark .heart-float {
   transform: translate(-50%, -20px);
 }
 
+/* ============================= */
+/* 💞 Reproductor flotante galería */
+/* ============================= */
+.floating-player {
+  position: fixed;
+  bottom: 22px;
+  right: 22px;
+  background: var(--player-bg, #ff69b4);
+  color: #fff;
+  border-radius: 25px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 10000;
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+}
+
+.floating-player.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.player-info {
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 130px;
+}
+
+.player-btn {
+  background: #fff;
+  color: #ff69b4;
+  border: none;
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.player-btn:hover {
+  transform: scale(1.1);
+}
+
+/* 🎨 Adaptación según mood */
+body.mood-romantico .floating-player {
+  --player-bg: #ff69b4;
+}
+
+body.mood-chill .floating-player {
+  --player-bg: #82d6ff;
+}
+
+body.mood-noche .floating-player {
+  --player-bg: #4b5dff;
+}
+
+body.mood-triste .floating-player {
+  --player-bg: #a6b3ff;
+}
+
 
 
 /* =========================

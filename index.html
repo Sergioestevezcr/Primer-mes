@@ -222,6 +222,30 @@
       }
     });
   </script>
+  <script>
+    const audio = document.getElementById('audio');
+    const songSelect = document.getElementById('songSelect');
+
+    // 🩷 Guardar estado al salir hacia la galería
+    document.querySelector('a[href="galeria.html"]')?.addEventListener('click', () => {
+      const currentTheme = document.body.classList.contains('dark') ? 'dark' : 'light';
+      localStorage.setItem('theme', currentTheme);
+
+      const currentMood = Array.from(document.body.classList).find(c => c.startsWith('mood-')) || '';
+      localStorage.setItem('mood', currentMood);
+
+      if (audio) {
+        localStorage.setItem('musicSrc', audio.currentSrc);
+        localStorage.setItem('musicTime', audio.currentTime);
+        localStorage.setItem('musicPlaying', !audio.paused);
+      }
+
+      if (songSelect) {
+        const title = songSelect.selectedOptions[0]?.textContent || 'Tu canción 💕';
+        localStorage.setItem('musicTitle', title);
+      }
+    });
+  </script>
 </body>
 
 </html>

@@ -326,6 +326,19 @@ setInterval(tickAll, 1000);
     showToast(current);
   });
 })();
+// 🎧 Guardar música actual y mood activo en localStorage
+function savePlayerState(songSrc, currentMood) {
+  localStorage.setItem("musicPlaying", songSrc);
+  localStorage.setItem("musicMood", currentMood);
+}
+
+// 📦 Cargar estado guardado (para galería)
+function loadPlayerState() {
+  return {
+    song: localStorage.getItem("musicPlaying"),
+    mood: localStorage.getItem("musicMood"),
+  };
+}
 
 
 // =========================

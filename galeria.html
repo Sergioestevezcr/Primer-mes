@@ -114,32 +114,72 @@
     </script>
 
     <script src="script.js" defer></script>
+    <!-- 🎧 Mini Reproductor Flotante -->
+    <div id="floatingPlayer" class="floating-player hidden">
+        <div class="player-info">
+            <span id="playerSongName">Canción actual 💖</span>
+        </div>
+        <button id="playerToggleBtn" class="player-btn">⏸️</button>
+    </div>
 
-    <!-- 🎵 Restaurar sincronización -->
+    <!-- 🎧 Mini Reproductor Flotante -->
+    <div id="floatingPlayer" class="floating-player hidden">
+        <div class="player-info">
+            <span id="playerSongName">Canción actual 💖</span>
+        </div>
+        <button id="playerToggleBtn" class="player-btn">⏸️</button>
+    </div>
+
     <script>
-        const savedTheme = localStorage.getItem('theme') || 'light';
-        document.body.classList.add(savedTheme);
+        // ================================
+        // 🎵 Reproductor compartido entre páginas
+        // ================================
+        const savedSong = localStorage.getItem("musicSrc");
+        const savedMood = localStorage.getItem("mood");
+        const savedTheme = localStorage.getItem("theme");
+        const savedName = localStorage.getItem("musicTitle") || "Tu canción 💕";
+        const savedTime = parseFloat(localStorage.getItem("musicTime") || "0");
+        const wasPlaying = localStorage.getItem("musicPlaying") === "true";
 
-        const savedMood = localStorage.getItem('mood');
+        if (savedTheme === "dark") document.body.classList.add("dark");
         if (savedMood) document.body.classList.add(savedMood);
 
-        const musicSrc = localStorage.getItem('musicSrc');
-        const musicTime = parseFloat(localStorage.getItem('musicTime') || '0');
-        const wasPlaying = localStorage.getItem('musicPlaying') === 'true';
-
-        // Evitar duplicar audio
-        if (!document.getElementById('audio')) {
-            if (musicSrc) {
-                const audio = new Audio(musicSrc);
-                audio.id = 'audio';
-                audio.loop = true;
-                audio.volume = parseFloat(localStorage.getItem('amor_volume') || 0.6);
-                document.body.appendChild(audio);
-                audio.currentTime = musicTime;
-                if (wasPlaying) audio.play().catch(() => { });
-            }
+        let player = document.getElementById("sharedMusic");
+        if (!player && savedSong) {
+            player = document.createElement("audio");
+            player.src = savedSong;
+            player.autoplay = wasPlaying;
+            player.loop = true;
+            player.volume = 0.6;
+            player.currentTime = savedTime;
+            player.id = "sharedMusic";
+            player.style.display = "none";
+            document.body.appendChild(player);
         }
+
+        const floating = document.getElementById("floatingPlayer");
+        const songName = document.getElementById("playerSongName");
+        const toggleBtn = document.getElementById("playerToggleBtn");
+
+        songName.textContent = savedName;
+        floating.classList.remove("hidden");
+
+        let isPlaying = wasPlaying;
+
+        toggleBtn.addEventListener("click", () => {
+            if (!player) return;
+            if (isPlaying) {
+                player.pause();
+                toggleBtn.textContent = "▶️";
+            } else {
+                player.play();
+                toggleBtn.textContent = "⏸️";
+            }
+            isPlaying = !isPlaying;
+        });
     </script>
+
+
 </body>
 
 </html>
