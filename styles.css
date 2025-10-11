@@ -1731,6 +1731,118 @@ body.dark .heart-float {
   }
 }
 
+/* ============================= */
+/* 💞 Ajuste responsivo de galería */
+/* ============================= */
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1.5rem;
+  justify-items: center;
+  align-items: stretch;
+}
+
+.gitem {
+  display: flex;
+  flex-direction: column;
+  background: var(--card-bg, #fff);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.gitem img,
+.gitem video {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  display: block;
+}
+
+.gitem:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+}
+
+.gitem figcaption {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0.7rem 0.9rem 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.85);
+  border-top: 1px solid rgba(255, 192, 203, 0.25);
+}
+
+.gitem .cat-label {
+  display: block;
+  color: #f38ba0;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.gitem .desc-text {
+  min-height: 1.8em;
+  /* deja espacio uniforme aunque no haya descripción */
+  color: #333;
+  font-weight: 400;
+  margin-bottom: 0.5rem;
+}
+
+/* Contenedor de botones dentro del figcaption */
+.media-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.3rem;
+}
+
+/* Botones mini */
+.btn-mini {
+  font-size: 0.8rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.btn-mini.btn-edit {
+  background-color: #ff69b4;
+  color: white;
+}
+
+.btn-mini.btn-delete {
+  background-color: #ffb3c6;
+  color: #222;
+}
+
+.btn-mini:hover {
+  transform: scale(1.05);
+}
+
+/* 📱 Responsividad móvil */
+@media (max-width: 600px) {
+
+  .gitem img,
+  .gitem video {
+    height: 220px;
+  }
+
+  .gitem figcaption {
+    font-size: 0.85rem;
+  }
+
+  .btn-mini {
+    width: 100%;
+  }
+}
+
 
 /* =========================
    FIN CSS
