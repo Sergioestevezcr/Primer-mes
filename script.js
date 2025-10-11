@@ -426,7 +426,6 @@ setInterval(tickAll, 1000);
   // =========================
   // 🖼️ Crear la tarjeta visual con descripción + botones
   // =========================
-  console.log("🔍 Media recibido:", m);
 
   function appendMedia(m) {
     // Guardar en memoria local
