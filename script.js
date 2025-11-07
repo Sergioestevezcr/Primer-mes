@@ -326,6 +326,19 @@ setInterval(tickAll, 1000);
     showToast(current);
   });
 })();
+// 🎧 Guardar música actual y mood activo en localStorage
+function savePlayerState(songSrc, currentMood) {
+  localStorage.setItem("musicPlaying", songSrc);
+  localStorage.setItem("musicMood", currentMood);
+}
+
+// 📦 Cargar estado guardado (para galería)
+function loadPlayerState() {
+  return {
+    song: localStorage.getItem("musicPlaying"),
+    mood: localStorage.getItem("musicMood"),
+  };
+}
 
 
 // =========================
@@ -389,6 +402,16 @@ setInterval(tickAll, 1000);
       .map(s => s.trim())
       .filter(Boolean);
 
+  // 💖 Dispara el corazón flotante
+  function showHeartFloat() {
+    const el = document.createElement('div');
+    el.className = 'heart-float';
+    el.textContent = '💖';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1500);
+  }
+
+  // ✅ Toast de confirmación + corazón
   function showSuccessToast(message = "Hecho 💞") {
     let toast = document.querySelector(".success-toast");
     if (!toast) {
@@ -398,8 +421,9 @@ setInterval(tickAll, 1000);
     }
     toast.textContent = message;
     toast.classList.add("show");
+    showHeartFloat(); // << aquí se dispara la animación
     setTimeout(() => toast.classList.add("hide"), 2000);
-    setTimeout(() => toast.classList.remove("show", "hide"), 2500);
+    setTimeout(() => toast.classList.remove("show", "hide"), 2600);
   }
 
   // ---------- Carga inicial ----------
@@ -437,7 +461,10 @@ setInterval(tickAll, 1000);
     fig.dataset.type = m.resource_type;
     fig.dataset.tags = (m.tags || []).join(",");
 
-    const caption = m.context?.custom?.caption || "Sin descripción 💬";
+    const caption =
+      m.context?.custom?.caption ||
+      m.context?.caption ||
+      "Sin descripción 💬";
     const categories = (m.tags && m.tags.length) ? m.tags.join(", ") : "otros";
 
     // Imagen o video
